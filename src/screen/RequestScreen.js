@@ -1,7 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Text, View, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { LPButton } from '../component/LPButton';
-import ImgToBase64 from 'react-native-image-base64';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'lapelicula.db' });
 var i = 1;
@@ -13,7 +12,6 @@ export default class RequestScreen extends React.Component {
         header: null
     });
 
-    // quando o componente foi criado/montado
     componentDidMount() {
         if (typeof this.props.navigation.state.params !== "undefined") {
             this.setState({
@@ -39,15 +37,13 @@ export default class RequestScreen extends React.Component {
     }
 
     salvar() {
-        //insert no banco
         db.transaction(tx => {
             tx.executeSql('insert into filme(descricao, imagem) values(?, ?)',
-                [this.state.title, this.state.uri]);
+                [this.state.title, this.state.imgUrl]);
         });
         this.props.navigation.navigate('Home');
     }
 
-    //Chama imediatamente apos componente criado;
     componentDidMount() {
         return fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=react-native&type=video&key=AIzaSyD8mZo4NZBHNvDettPCtSu7NxG8aGNCbGs')
             .then((response) => response.json())
@@ -92,17 +88,6 @@ export default class RequestScreen extends React.Component {
                 console.error(error);
             });
     }
-
-    getBase64() {
-        //img = '';
-        //alert(this.state.imgUrl);
-        ImgToBase64.getBase64String('../img/cadastrar_inativo.png')
-            .then(base64String => alert(base64String))
-            .catch(err => alert(err));
-
-        //alert(img);
-    }
-
 
     render() {
 
