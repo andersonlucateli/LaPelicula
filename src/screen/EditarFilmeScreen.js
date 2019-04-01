@@ -14,28 +14,9 @@ var db = openDatabase({ name: 'lapelicula.db' });
 export default class FilmeScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        tabBarLabel: 'Cad. Filme',
-        tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-                return (
-                    <Image source={require('../img/cadastrar_ativo.png')} style={{ width: 26, height: 26 }} />
-                );
-            } else {
-                return (
-                    <Image source={require('../img/cadastrar_inativo.png')} style={{ width: 26, height: 26 }} />
-                );
-            }
-        }
+        tabBarLabel: 'Editar Filme',
+        header: null
     });
-
-    // quando o componente foi criado/montado
-    componentDidMount() {
-        if (typeof this.props.navigation.state.params !== "undefined") {
-            this.setState({
-                uri: this.props.navigation.state.params.imguri
-            });
-        }
-    }
 
     constructor(props) {
         super(props);
@@ -44,35 +25,31 @@ export default class FilmeScreen extends Component {
             uri: null
         };
 
-        this.abrirCamera = this.abrirCamera.bind(this);
+        this.state.descricao = this.props.navigation.state.params.descricao;
+
         this.salvar = this.salvar.bind(this);
     }
 
 
-    abrirCamera() {
-        this.props.navigation.navigate('Camera');
-    }
-
     salvar() {
-        //insert no banco
+        codigo = this.props.navigation.state.params.codigo; 
+
+        //alert(codigo + this.state.descricao);
+        
         db.transaction(tx => {
-            tx.executeSql('insert into filme(descricao, imagem) values(?, ?)',
-                [this.state.descricao, this.state.uri]);
+            tx.executeSql('update filme set descricao = \'' + this.state.descricao + '\' where codigo = ' + codigo);
         });
         this.props.navigation.navigate('Home');
+        
     }
-
 
     render() {
         return (
             <View style={styles.container}>
+                <Text>Editando</Text>
                 <View style={styles.areaFoto}>
                     <View style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Image source={{ uri: this.state.uri }}
-                            style={{
-                                backgroundColor: 'white', justifyContent: 'center',
-                                alignItems: 'flex-start', width: 150, height: 150, marginBottom: 40
-                            }} />
+                        <Image source={{ uri: this.state.uri }} style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'flex-start', width: 150, height: 150, marginBottom: 40 }} />
                     </View>
                     <View style={{ width: 50, heigth: 50 }}>
                         <TouchableOpacity onPress={() => { this.abrirCamera() }}>
@@ -84,7 +61,7 @@ export default class FilmeScreen extends Component {
                 </View>
                 <View style={styles.areaInput}>
                     <TextInput style={styles.inputText}
-                        multiline={true} placeholder='Descrição'
+                        multiline={true} placeholder='Descrição' value={this.state.descricao}
                         onChangeText={(valor) => this.setState({ descricao: valor })} />
                 </View>
                 <View style={styles.areaBotao}>
@@ -95,16 +72,6 @@ export default class FilmeScreen extends Component {
                         <LPButton titulo='Cancelar'
                             onPress={() => this.props.navigation.navigate('Home')} />
                     </View>
-                </View>
-
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'stretch'
-                }}>
-                    <LPButton titulo='HTTP Request'
-                        onPress={() => this.props.navigation.navigate('Http')} />
                 </View>
             </View >
         );

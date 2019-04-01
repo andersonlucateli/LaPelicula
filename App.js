@@ -11,6 +11,8 @@ import ListaFilmesScreen from './src/screen/ListaFilmesScreen';
 import FilmeScreen from './src/screen/FilmeScreen';
 import SobreScreen from './src/screen/SobreScreen';
 import CameraScreen from './src/screen/CameraScreen';
+import EditarFilmeScreen from './src/screen/EditarFilmeScreen';
+import RequestScreen from './src/screen/RequestScreen';
 import { openDatabase } from 'react-native-sqlite-storage';
 
 //Criar objeto para respresentar o banco de dados
@@ -93,7 +95,10 @@ const AppTab = createBottomTabNavigator({
 const AppStack = createStackNavigator(
   {
     Login: LoginScreen,
-    Camera: CameraScreen
+    Camera: CameraScreen,
+    Filme: FilmeScreen,
+    Editar: EditarFilmeScreen,
+    Http: RequestScreen
   }
 );
 
@@ -108,4 +113,5 @@ const AppSwitch = createSwitchNavigator({
 
 // container principal da aplicação
 const App = createAppContainer(AppSwitch);
+
 export default App;

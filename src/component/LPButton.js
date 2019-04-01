@@ -19,7 +19,7 @@ export class LPButton extends Component {
           borderWidth: 2,
           borderColor: 'white',
           borderRadius: 15,          
-          backgroundColor: '#0C4CE8'
+          backgroundColor: '#570076'
         },
         botaoArea: {
           flex: 1,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Button } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 export default class CameraScreen extends Component {
@@ -40,17 +40,35 @@ export default class CameraScreen extends Component {
             permissionDialogMessage={'Precisamos de permissão para cessar a câmera!'}
             style={styles.preview} />
         </View>
-        <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center' }}>
-          <Button title="Capturar" onPress={() => this.capturarFoto()} />
+
+        <View style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'stretch'
+                }}>
+          <Button color="#570076" title="Capturar" onPress={() => this.capturarFoto()} />
         </View>
-        <View style={{ flex: 1.5 }}>
-          <Image style={{ borderWidth: 1, borderColor: 'black', height: 150, width: 150 }}
+
+              <View style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}>
+          <Image style={{ borderWidth: 1, borderColor: 'black', height: 150, width: 360 }}
             source={{ uri: this.state.uri }} />
-          <View style={{ flexDirection: 'row' }}>
-            <Button title="OK" onPress={() => this.props.navigation.navigate('Filme', { imguri: this.state.uri })} />
-            <Button title="Cancelar" onPress={() => this.props.navigation.navigate('Filme')} />
-          </View>
         </View>
+
+          <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'stretch'
+          }}>
+            <Button style={{ borderColor: "white" }} color="#570076" title="OK"
+              onPress={() => this.props.navigation.navigate('Filme', { imguri: this.state.uri })} />
+            <Button color="#570076" title="Cancelar" onPress={() => this.props.navigation.navigate('Filme')} />
+          </View>
       </View>
     );
   }
@@ -60,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black'
+    backgroundColor: '#570076'
   },
   preview: {
     flex: 1,

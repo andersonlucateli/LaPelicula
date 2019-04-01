@@ -1,62 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight, ImageBackground, FlatList } from 'react-native';
+import { View, StyleSheet, Image, FlatList, Picker, Text } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
+import FilmeItem from './FilmeItem';
 
 var db = openDatabase({ name: 'lapelicula.db' });
 
-//Component de Filmes
-class Filmes extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <TouchableHighlight onPress={() => alert("Filme: " + this.props.data.descricao)} underlayColor="blue" >
+export default class ListaFilmesScreen extends Component {
 
-          <ImageBackground resizeMode="cover" source={{ uri: this.props.data.imagem }} style={{ height: 150 }}>
-            <View style={{
-              flex: 1,
-              alignItems: 'flex-start',
-              justifyContent: 'flex-end',
-              paddingLeft: 10,
-              paddingBottom: 10
-            }}>
-              <Text style={{ fontSize: 23, color: '#FFFFFF', fontWeight: 'bold' }}>{this.props.data.descricao}</Text>
-            </View>
-          </ImageBackground>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}
-
-export default class ListaFilmes extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      filmes: []
-    }
-
-    //Buscar dados dos filmes na base
-    db.transaction(tx => {
-      tx.executeSql('select * from filme order by descricao', [], (tx, res) => {
-        //tratar o resultado a consulta
-        var temp = [];
-        for (let i = 0; i < res.rows.length; i++) {
-          temp.push(res.rows.item(i));
-        }
-        //seta os filmes para exibir no Flatlist
-        this.setState({ filmes: temp });
-
-      });
-    });
-
-  }
-
-
-  //Configurando opções de navegação
   static navigationOptions = ({ navigation }) => ({
-    //Comentado para usar Tabs
-    //title: 'Página Principal'
 
     tabBarLabel: 'Lista Filmes',
     tabBarIcon: ({ focused, tintColor }) => {
@@ -73,13 +24,52 @@ export default class ListaFilmes extends Component {
 
   });
 
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      filmes: [],
+      order: 'codigo'
+    }
+
+
+  }
+
+  componentDidMount() {
+
+    db.transaction(tx => {
+      tx.executeSql('select * from filme order by ' + this.state.order, [], (tx, res) => {
+        var temp = [];
+        for (let i = 0; i < res.rows.length; i++) {
+          temp.push(res.rows.item(i));
+        }
+        this.setState({ filmes: temp });
+
+      });
+    });
+
+    alert(this.state.order);
+
+  }
+
   render() {
     return (
+
       <View style={styles.container}>
+        <Text style={styles.texto}>Ordenar por:</Text>
+        <Picker
+          selectedValue={this.state.order}
+          style={styles.texto}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ order: itemValue })
+          }>
+          <Picker.Item label="Descrição" value="descricao" />
+          <Picker.Item label="Código" value="codigo" />
+        </Picker>
         <FlatList
-          data={this.state.filmes}
+          data={this.state.filmes} extraData={this.state}
           keyExtractor={item => item.codigo.toString()}
-          renderItem={({ item }) => <Filmes data={item} />}
+          renderItem={({ item }) => <FilmeItem data={item} />}
         />
       </View>
     );
@@ -89,6 +79,11 @@ export default class ListaFilmes extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'green'
+    backgroundColor: '#570076',
+  },
+  texto: {
+    width: 130,
+    fontWeight: 'bold',
+    color: 'white'
   }
 });
