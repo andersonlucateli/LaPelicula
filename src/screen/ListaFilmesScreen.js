@@ -32,10 +32,25 @@ export default class ListaFilmesScreen extends Component {
       order: 'codigo'
     }
 
-
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
+    db.transaction(tx => {
+      tx.executeSql('select * from filme order by ' + this.state.order, [], (tx, res) => {
+        var temp = [];
+        for (let i = 0; i < res.rows.length; i++) {
+          temp.push(res.rows.item(i));
+        }
+        this.setState({ filmes: temp });
+
+      });
+    });
+  }
+
+  refresh(itemValue) {
+
+    this.setState({ order: itemValue });
 
     db.transaction(tx => {
       tx.executeSql('select * from filme order by ' + this.state.order, [], (tx, res) => {
@@ -48,8 +63,6 @@ export default class ListaFilmesScreen extends Component {
       });
     });
 
-    alert(this.state.order);
-
   }
 
   render() {
@@ -61,7 +74,7 @@ export default class ListaFilmesScreen extends Component {
           selectedValue={this.state.order}
           style={styles.texto}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({ order: itemValue })
+           this.refresh(itemValue)
           }>
           <Picker.Item label="Descrição" value="descricao" />
           <Picker.Item label="Código" value="codigo" />

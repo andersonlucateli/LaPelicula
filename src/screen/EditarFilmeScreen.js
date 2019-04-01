@@ -26,6 +26,7 @@ export default class FilmeScreen extends Component {
         };
 
         this.state.descricao = this.props.navigation.state.params.descricao;
+        this.state.uri = this.props.navigation.state.params.uri;
 
         this.salvar = this.salvar.bind(this);
     }
@@ -50,13 +51,6 @@ export default class FilmeScreen extends Component {
                 <View style={styles.areaFoto}>
                     <View style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Image source={{ uri: this.state.uri }} style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'flex-start', width: 150, height: 150, marginBottom: 40 }} />
-                    </View>
-                    <View style={{ width: 50, heigth: 50 }}>
-                        <TouchableOpacity onPress={() => { this.abrirCamera() }}>
-                            <View>
-                                <Image source={require('../img/captura.png')} />
-                            </View>
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.areaInput}>

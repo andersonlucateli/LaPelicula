@@ -27,13 +27,7 @@ export default class RequestScreen extends React.Component {
             this.uri = ''
 
         this.getHttp = this.getHttp.bind(this);
-        this.getBase64 = this.getBase64.bind(this);
         this.salvar = this.salvar.bind(this);
-    }
-
-
-    abrirCamera() {
-        this.props.navigation.navigate('Camera');
     }
 
     salvar() {
@@ -129,7 +123,6 @@ export default class RequestScreen extends React.Component {
                 <View style={{ flex: 1.5, paddingTop: 20, height: 300, width: 300, }}>
                     <Text>Buscando "react-native" no YouTube!</Text>
                     <LPButton titulo="Buscar Outro" onPress={() => { this.getHttp() }} />
-                    <LPButton titulo="Get Base64" onPress={() => { this.getBase64() }} />
                 </View>
             </View >
         );

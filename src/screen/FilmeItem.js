@@ -42,7 +42,7 @@ class FilmeItem extends Component {
                                     {
                                         codigo: this.props.data.codigo,
                                         descricao: this.props.data.descricao,
-                                        img: this.props.data.uri
+                                        uri: this.props.data.imagem
                                     })
                             },
                             { text: 'Excluir', onPress: () => this.excluir() },
